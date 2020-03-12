@@ -1,34 +1,34 @@
 <template>
-
-  <div class="detail">
+  <div>
     <Nav/>
-    <div class= "imgContainer">
-      <img class="img-profile" :src="image" alt="foto de perfil">
-      <div @click="addToFav" class = "favContainer">
-        <img v-if= isFavouriteUser class="img-icon" src="../assets/fav.png" alt="favourite icon">
-        <img v-if= !isFavouriteUser class="img-icon" src="../assets/no-fav.png" alt="favourite icon">
-        <p class="img-text">{{ isFavouriteUser ? 'Remove Fav' : 'Add Fav' }}</p>
+    <div class="detail">
+      <div class= "imgContainer">
+        <img class="img-profile" :src="image" alt="foto de perfil">
+        <div @click="addToFav" class = "favContainer">
+          <img v-if= isFavouriteUser class="img-icon" src="../assets/fav.png" alt="favourite icon">
+          <img v-if= !isFavouriteUser class="img-icon" src="../assets/no-fav.png" alt="favourite icon">
+          <p class="img-text">{{ isFavouriteUser ? 'Remove Fav' : 'Add Fav' }}</p>
+        </div>
       </div>
-    </div>
 
-    <div>
-      <p class="name">{{ userName }}</p>
-      <p><b>e-mail:</b> {{ email }}</p>
-      <p><b>Phone:</b>{{ phone }}</p>
-    </div>
-    <div class="location">
-      <div class="personal-info">
-        <p><b>City:</b> {{ city }}</p>
-        <p><b>Street:</b> {{ street }}</p>
+      <div>
+        <p class="name">{{ userName }}</p>
+        <p><b>e-mail:</b> {{ email }}</p>
+        <p><b>Phone:</b>{{ phone }}</p>
       </div>
-      <div class='map'><Map :latitude=latitude :longitude=longitude /> </div>
+      <div class="location">
+        <div class="personal-info">
+          <p><b>City:</b> {{ city }}</p>
+          <p><b>Street:</b> {{ street }}</p>
+        </div>
+        <!-- <div class='map'><Map :latitude=latitude :longitude=longitude /> </div> -->
+      </div>
     </div>
   </div>
-
 </template>
+
 <script>
 import {mapState} from 'vuex';
-import Map from "../components/Map.vue";
 import Nav from "../components/Nav.vue";
 
 export default { 
@@ -47,7 +47,6 @@ export default {
       }
   },
   components: {
-    Map,
     Nav
   },
 
@@ -96,7 +95,7 @@ export default {
   }
 
   .detail {
-    width: 50%;
+    width: 30%;
     margin: 25px auto 0;
     padding: 30px;
     border-radius: 0.9em;
@@ -109,12 +108,6 @@ export default {
       border: 1px solid grey;
       border-radius: 12px;
       padding:16px;
-  }
-
-  .map {
-    width:30%;
-    height: 70%;
-    border: 1px solid blue;
   }
 
   button {
@@ -144,5 +137,11 @@ export default {
 
   .name {
     font-weight: 900;
+  }
+
+  @media only screen and (max-width: 768px) {
+      .detail {
+        width: 70%;
+      }
   }
 </style>

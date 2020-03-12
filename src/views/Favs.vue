@@ -1,13 +1,16 @@
 <template>
   <div id="app">
     <Nav/>
-    <div class="usersList" v-if='hasFavourites'>
-      <UserCard v-for="(user, index) in usersFav" :username=user.name.first :gender=user.gender :imagesrc=user.picture.medium :email=user.email :birthDate=user.dob.date :signDay=user.registered.date :nationality=user.location.country :key="index" @get-index='getIndex' :id="index"/>
+    <div v-if='hasFavourites'>
+      <div class="usersList" >
+        <UserCard v-for="(user, index) in usersFav" :username=user.name.first :gender=user.gender :imagesrc=user.picture.medium :email=user.email :birthDate=user.dob.date :signDay=user.registered.date :nationality=user.location.country :key="index" @get-index='getIndex' :id="index"/>
+      </div>
+      <download-csv class="downloadCSV" :data= "usersFavCsv"> Download</download-csv>
     </div> 
     <div v-else>
       <p>No hay resultados</p>
     </div>
-    <download-csv :data = "usersFavCsv"> Download Data </download-csv>
+    
   </div>
 
 </template>
@@ -76,5 +79,16 @@ export default {
     justify-content: center;
     margin: 2em;
     padding-bottom: 50px;
+  }
+
+  .downloadCSV {
+    margin: auto;
+    padding-left: 12px;
+    padding: 10px 20px;
+    width: 20%;
+    line-height: 10px;
+    text-decoration: none;
+    color: #ffffff;
+    background-color :red; 
   }
 </style>

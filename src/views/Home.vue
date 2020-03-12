@@ -1,13 +1,19 @@
 <template>
   <div id="app">
      <Nav/>
-    <div class="usersList" v-if=hasSelectedGender>
+    <div class="usersList" v-if=usersFrom>
+      <UserCard v-for="(user, index) in usersFrom" @get-index='getIndex' :username=user.name.first :gender=user.gender :imagesrc=user.picture.medium :email=user.email :birthDate=user.dob.date :signDay=user.registered.date :nationality=user.location.country :key="index" :id="index"/>
+    </div>
+     <div class="usersList" v-else>
         <UserCard v-for="(user, index) in hasSelectedGender" @get-index='getIndex' :username=user.name.first :gender=user.gender :imagesrc=user.picture.medium :email=user.email :birthDate=user.dob.date :signDay=user.registered.date :nationality=user.location.country :key="index" :id="index"/>
     </div>
-    <div v-else>
-      <p>No hay resultados</p>
-    </div>
-    <FilterComp title = "Gender" @gender-filt='filterGender'/>
+
+    <FilterComp
+     @gender-filt='filterGender' 
+     @nationality-filt='filterNationality' 
+     @age-filt='filterAge'
+     :nationalities='getNationalities'/>
+     
   </div>
 </template>
 
@@ -20,9 +26,13 @@ import Nav from "../components/Nav.vue";
 export default {
   name: "app",
   data () {
-      return {
-        searchedGender: ""
-      }
+    return {
+      searchedGender: "",
+      searchedAge: "",
+      searchedNationality: "",
+      nationalities: [],
+      ages: []
+    }
   },
 
   mounted() {
@@ -39,7 +49,14 @@ export default {
 
   methods: {
     filterGender(data){
-        this.searchedGender = data;
+      this.searchedNationality = false;
+      this.searchedGender = data;
+    },
+    filterNationality(data){
+     this.searchedNationality = data
+    },
+    filterAge(data){
+      this.searchedAge = data;
     },
     getIndex(id) {
       this.$store.dispatch('loadUserDetail', id);
@@ -51,14 +68,30 @@ export default {
       'users',
       'usersSelected'
     ]),
+    getNationalities ({users}) {
+      const nationalities = users.reduce((acc, user) => {
+        if (!acc.includes(user.location.country)) {
+          acc.push(user.location.country)
+        }
+        return acc
+      }, [])
+      return nationalities
+    },
     hasSelectedGender({searchedGender, users}){
       if(searchedGender) {
         const usersSelected = users.filter(user => user.gender  === searchedGender)
-        this.$store.dispatch('loadSelectedUsers', usersSelected);
+        this.$store.dispatch('loadSelectedGender', usersSelected);
         return usersSelected;
       }
-      this.$store.dispatch('loadSelectedUsers', users);
-        return users;
+      return users;
+    },
+    usersFrom({searchedNationality, users}){
+      if(searchedNationality) {
+        const usersSelected = users.filter(user => user.location.country  === searchedNationality)
+        this.$store.dispatch('loadUsersFrom', usersSelected);
+        return usersSelected;
+       }
+      return false
     }
   }
 };
@@ -75,10 +108,10 @@ export default {
     }
 
     .usersList {
-        display:flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        margin: 0 2em 10%;
-        padding-bottom: 50px;
+      display:flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 0 2em 10%;
+      padding-bottom: 50px;
     }
 </style>

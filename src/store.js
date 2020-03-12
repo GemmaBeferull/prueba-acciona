@@ -22,11 +22,14 @@ export default new Vuex.Store({
     loadUserDetail({ commit }, email) {
       commit("SET_INDEX", email);
     },
-    loadSelectedUsers({ commit }, selectedUsers) {
-      commit("SET_SELECTED", selectedUsers);
+    loadSelectedGender({ commit }, selectedGender) {
+      commit("SET_GENDER", selectedGender);
     },
     loadFavUsers({ commit }, user) {
       commit("SET_FAVOURITE", user);
+    },
+    loadUsersFrom({ commit }, selectedCountry) {
+      commit("SET_FROM", selectedCountry);
     }
   },
 
@@ -37,8 +40,8 @@ export default new Vuex.Store({
     SET_INDEX(state, userIndex) {
       state.userIndex = userIndex;
     },
-    SET_SELECTED(state, selectedUsers) {
-      state.selectedUsers = selectedUsers;
+    SET_GENDER(state, selectedGender) {
+      state.selectedUsers = selectedGender;
     },
     SET_FAVOURITE(state, currentUser) {
       const mailUser = currentUser.email;
@@ -46,7 +49,10 @@ export default new Vuex.Store({
       if (currentUser.isFavouriteUser) {
         return state.usersFav.push(currentUser);
       }
-      return state.usersFav.pop(index);
+      return state.usersFav.splice(index, 1);
+    },
+    SET_FROM(state, selectedCountry) {
+      state.selectedUsers = selectedCountry;
     }
   }
 });
